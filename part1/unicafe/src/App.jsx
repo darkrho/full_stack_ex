@@ -10,9 +10,10 @@ function Button({ handleClick, text }) {
 
 function StatisticLine({ text, value }) {
   return (
-    <div>
-      <p>{text} {value}</p>
-    </div>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
@@ -27,16 +28,22 @@ function Statistics({ good, neutral, bad, all, avg, positive }) {
     )
   }
   return (
-    <div>
-      <h2>Statistics</h2>
-      <br />
-      <StatisticLine text="good" num={good} />
-      <StatisticLine text="neutral" num={neutral} />
-      <StatisticLine text="bad" num={bad} />
-      <StatisticLine text="all" num={all} />
-      <StatisticLine text="average" num={avg} />
-      <StatisticLine text="positive" num={positive} />
-    </div>
+
+    <table>
+      <thead>
+        <th>
+          <h2>Statistics</h2>
+        </th>
+      </thead>
+      <tbody>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="all" value={all} />
+        <StatisticLine text="average" value={avg} />
+        <StatisticLine text="positive" value={positive} />
+      </tbody>
+    </table>
   )
 }
 function App() {
