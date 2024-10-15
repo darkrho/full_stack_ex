@@ -12,6 +12,8 @@ function App() {
   const [newName, setNewName] = useState('')
   // control state phone
   const [newPhone, setNewPhone] = useState('')
+  // control state search
+  const [newSearch, setNewSearch] = useState('')
 
 
   // submit function 
@@ -31,6 +33,10 @@ function App() {
     setNewPhone(event.target.value)
   }
 
+  const handleInputSearch = (event) => {
+    setNewSearch(event.target.value)
+  }
+
   // add name to the persons state
   const addName = () => {
     const newPerson = {
@@ -45,12 +51,26 @@ function App() {
       setPersons(persons.concat(newPerson))
       setNewName('')
     }
-
+  }
+  // filter persons with search field
+  let contacts;
+  if (newSearch.length > 0) {
+    contacts = persons.filter((person) => person.name.startsWith(newSearch))
+  } else {
+    contacts = persons
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      filter shown with
+      <input
+        value={newSearch}
+        onChange={handleInputSearch}
+      />
+      <br />
+      <h2>Add one more</h2>
+      <br />
       <form onSubmit={handleForm}>
         <div>
           name:
@@ -58,6 +78,7 @@ function App() {
             value={newName}
             onChange={handleInputName}
           />
+          <br />
           phone:
           <input
             value={newPhone}
@@ -72,13 +93,10 @@ function App() {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map((person, idx) => {
-        return (
-          <p key={idx}>{person.name} {person.number}</p>
-        )
-      })}
+      {
+        contacts.map((person, idx) => { return (<p key={idx}>{person.name} {person.number}</p>) })
+      }
     </div>
   )
 }
-
 export default App
