@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import FilterPerson from './components/FilterPerson'
-import axios from 'axios'
+import personsServices from './services/persons'
 
 function App() {
   // states
@@ -11,19 +11,37 @@ function App() {
   const [newSearch, setNewSearch] = useState("")
   // get persons from json server
   const hook = () => {
-    axios.get("http://localhost:3001/persons")
+    personsServices.getAll()
       .then(response => {
         setPersons(response.data)
       })
   }
   useEffect(hook, [])
   // filter persons with search field
-  let contacts;
-  if (newSearch.length > 0) {
-    contacts = persons.filter((person) => person.name.startsWith(newSearch))
-  } else {
-    contacts = persons
+  const filterPerson = () => {
+    let contacts;
+    if (newSearch.length > 0) {
+      contacts = persons.filter((person) => person.name.startsWith(newSearch))
+    } else {
+      contacts = persons
+    }
+    return contacts
   }
+
+
+  const handleDelete = (id) => {
+    if (window.confirm("Do you really want to delete the contact?")) {
+      personsServices
+        .erase(id)
+        .then(
+          response => {
+            setPersons(persons.filter(person => person.id !== response.id))
+          }
+        )
+    }
+
+  }
+
 
   return (
     <div>
@@ -33,7 +51,7 @@ function App() {
       <h2>Add one more</h2>
       <PersonForm persons={persons} setPersons={setPersons} />
       <h2>Numbers</h2>
-      <Persons contacts={contacts} />
+      <Persons contacts={filterPerson()} handleDelete={handleDelete} />
     </div>
   )
 }

@@ -1,11 +1,17 @@
-
-const Persons = ({ contacts }) => {
-
+import Person from './Person'
+const Persons = ({ contacts, handleDelete }) => {
+  const contactacsDisplay = contacts.map((person) => {
+    return (
+      <Person
+        key={person.id}
+        name={person.name}
+        number={person.number}
+        handleDelete={() => handleDelete(person.id)}
+      />)
+  })
   return (
     <div>
-      {
-        contacts.map((person, idx) => { return (<p key={idx}>{person.name} {person.number}</p>) })
-      }
+      {contactacsDisplay}
     </div>
   )
 }

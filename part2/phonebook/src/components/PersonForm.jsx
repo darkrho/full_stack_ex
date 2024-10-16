@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import personsServices from '../services/persons'
 
 const PersonForm = ({ persons, setPersons }) => {
   // control state name 
@@ -11,7 +12,6 @@ const PersonForm = ({ persons, setPersons }) => {
     // stop submit event
     event.preventDefault()
   }
-
 
   //  control the input widget and change the newName state
   const handleInputName = (event) => {
@@ -28,14 +28,35 @@ const PersonForm = ({ persons, setPersons }) => {
     const newPerson = {
       name: newName,
       number: newPhone,
-      id: persons.length + 1
     }
     // verify if name is alredy in persons state
     if (persons.some((person) => person.name === newName)) {
-      window.alert(`The name ${newName} alredy exist`)
+      if (persons.some((person) => person.number !== newPhone)) {
+        // change the phone number
+        if (window.confirm("Do you really want to change the number of the contact?")) {
+          // update the contact on the server
+          let personUpdate = persons.filter((person) => person.name === newName)[0]
+          console.log(personUpdate)
+          personUpdate = { ...personUpdate, number: newPhone }
+          personsServices
+            .update(personUpdate.id, personUpdate)
+            // update the persons state
+            .then(response => {
+              setPersons(persons.map(person => person.id === response.data.id ? response.data : person))
+            })
+        }
+      } else {
+        window.alert(`The name ${newName} alredy exist`)
+      }
     } else {
-      setPersons(persons.concat(newPerson))
+      // add to json server
+      personsServices.create(newPerson)
+        .then(response => {
+          // add to state persons
+          setPersons(persons.concat(response.data))
+        })
       setNewName('')
+      setNewPhone('')
     }
   }
   return (
@@ -64,3 +85,4 @@ const PersonForm = ({ persons, setPersons }) => {
 }
 
 export default PersonForm
+
