@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import personsServices from '../services/persons'
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, setMessage }) => {
   // control state name 
   const [newName, setNewName] = useState('')
   // control state phone
@@ -36,13 +36,14 @@ const PersonForm = ({ persons, setPersons }) => {
         if (window.confirm("Do you really want to change the number of the contact?")) {
           // update the contact on the server
           let personUpdate = persons.filter((person) => person.name === newName)[0]
-          console.log(personUpdate)
           personUpdate = { ...personUpdate, number: newPhone }
           personsServices
             .update(personUpdate.id, personUpdate)
             // update the persons state
             .then(response => {
               setPersons(persons.map(person => person.id === response.data.id ? response.data : person))
+              setMessage(`contact ${personUpdate.name} updated`)
+              setTimeout(() => { setMessage(null) }, 5000)
             })
         }
       } else {
@@ -54,6 +55,8 @@ const PersonForm = ({ persons, setPersons }) => {
         .then(response => {
           // add to state persons
           setPersons(persons.concat(response.data))
+          setMessage(`new contact ${response.data.name} added`)
+          setTimeout(() => { setMessage(null) }, 5000)
         })
       setNewName('')
       setNewPhone('')
