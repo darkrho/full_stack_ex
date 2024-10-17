@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import personsServices from '../services/persons'
 
-const PersonForm = ({ persons, setPersons, setMessage }) => {
+const PersonForm = ({ persons, setPersons, setMessage, setErrorMessage }) => {
   // control state name 
   const [newName, setNewName] = useState('')
   // control state phone
@@ -44,6 +44,11 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
               setPersons(persons.map(person => person.id === response.data.id ? response.data : person))
               setMessage(`contact ${personUpdate.name} updated`)
               setTimeout(() => { setMessage(null) }, 5000)
+            })
+            // eslint-disable-next-line no-unused-vars
+            .catch(error => {
+              setErrorMessage(`contact is already been removed from server`)
+              setTimeout(() => { setErrorMessage(null) }, 5000)
             })
         }
       } else {

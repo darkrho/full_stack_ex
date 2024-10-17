@@ -4,6 +4,7 @@ import PersonForm from './components/PersonForm'
 import FilterPerson from './components/FilterPerson'
 import personsServices from './services/persons'
 import Notification from './components/Notification'
+import ErroNotifications from './components/ErrorNotifications'
 
 function App() {
   // states
@@ -12,6 +13,8 @@ function App() {
   const [newSearch, setNewSearch] = useState("")
   // message for added persons
   const [message, setMessage] = useState(null)
+  // error messages
+  const [errorMessage, setErrorMessage] = useState(null)
   // get persons from json server
   const hook = () => {
     personsServices.getAll()
@@ -50,10 +53,11 @@ function App() {
     <div>
       <h2>Phonebook</h2>
       <Notification message={message} />
+      <ErroNotifications message={errorMessage} />
       filter shown with
       <FilterPerson newSearch={newSearch} setNewSearch={setNewSearch} />
       <h2>Add one more</h2>
-      <PersonForm persons={persons} setPersons={setPersons} setMessage={setMessage} />
+      <PersonForm persons={persons} setPersons={setPersons} setMessage={setMessage} setErrorMessage={setErrorMessage} />
       <h2>Numbers</h2>
       <Persons contacts={filterPerson()} handleDelete={handleDelete} />
     </div>

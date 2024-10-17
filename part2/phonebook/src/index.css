@@ -3,5 +3,13 @@
   padding: 10px;
   font-size: 16px;
   color: green;
-  background-color: grey;
+  background-color: rgb(187, 173, 173);
+}
+
+.eMsg {
+  border: 2px, solid, red;
+  padding: 10px;
+  font-size: 16px;
+  color: red;
+  background-color: rgb(187, 173, 173);
 }
